@@ -609,8 +609,13 @@ func (p *OAuthProxy) SignIn(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (p *OAuthProxy) SignOut(rw http.ResponseWriter, req *http.Request) {
+	redirect, err := p.GetRedirect(req)
+	if err != nil {
+		p.ErrorPage(rw, 500, "Internal Error", err.Error())
+		return
+	}
 	p.ClearSessionCookie(rw, req)
-	http.Redirect(rw, req, "/", 302)
+	http.Redirect(rw, req, redirect, 302)
 }
 
 func (p *OAuthProxy) OAuthStart(rw http.ResponseWriter, req *http.Request) {
