@@ -614,6 +614,7 @@ func (p *OAuthProxy) SignOut(rw http.ResponseWriter, req *http.Request) {
 		p.ErrorPage(rw, 500, "Internal Error", err.Error())
 		return
 	}
+	log.Printf("Redirect to %s", redirect)
 	p.ClearSessionCookie(rw, req)
 	http.Redirect(rw, req, redirect, 302)
 }
